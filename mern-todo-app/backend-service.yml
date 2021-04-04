@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: backend
+  namespace: staging
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "landingpage-production"
+spec:
+  rules:
+  - host: backend.miqbalnawawi.site
+    http:
+      paths:
+      #- path: /belajar
+      - backend:
+          serviceName: backend
+          servicePort: 4000
+  #tls:
+   # - hosts:
+    #  - landingpage-production.miqbalnawawi.site
+     # secretName: landing-page-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-service
+spec:
+  ports:
+    - port: 4000
+      protocol: TCP
+  selector:
+    app: server
+  #type: LoadBalancer
